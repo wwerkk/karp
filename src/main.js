@@ -21,7 +21,7 @@ class WhiteNoiseController {
       
       // Bind methods
       this.initAudio = this.initAudio.bind(this);
-      this.toggleNoise = this.toggleNoise.bind(this);
+      this.toggleKarp = this.toggleKarp.bind(this);
       this.updateVolume = this.updateVolume.bind(this);
       this.updateResonance = this.updateResonance.bind(this);
       this.updateDamping = this.updateDamping.bind(this);
@@ -29,7 +29,7 @@ class WhiteNoiseController {
       this.updateMix = this.updateMix.bind(this);
       
       // Add event listeners for changes and immediate input
-      this.toggleButton.addEventListener('click', this.toggleNoise);
+      this.toggleButton.addEventListener('click', this.toggleKarp);
       
       this.volumeSlider.addEventListener('input', this.updateVolume);
       this.resonanceSlider.addEventListener('input', this.updateResonance);
@@ -96,7 +96,7 @@ class WhiteNoiseController {
       }
     }
     
-    async toggleNoise() {
+    async toggleKarp() {
       // Initialize audio context if needed
       if (!this.audioContext) {
         const initialized = await this.initAudio();
