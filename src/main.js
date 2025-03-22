@@ -1,5 +1,5 @@
 // Main audio controller
-class WhiteNoiseController {
+class KarpController {
     constructor() {
       this.audioContext = null;
       this.karpNode = null;
@@ -200,5 +200,5 @@ class WhiteNoiseController {
   
   // Initialize the app when the DOM is loaded
   document.addEventListener('DOMContentLoaded', () => {
-    new WhiteNoiseController();
+    new KarpController();
   });
