@@ -21,13 +21,6 @@ class KarpProcessor extends AudioWorkletProcessor {
         minValue: 0,
         maxValue: 0.95,
         automationRate: 'k-rate'
-      },
-      {
-        name: 'mixAmount',
-        defaultValue: 1,
-        minValue: 0,
-        maxValue: 1,
-        automationRate: 'k-rate'
       }
     ];
   }
@@ -42,7 +35,6 @@ class KarpProcessor extends AudioWorkletProcessor {
     this.resonantFrequency = processorOptions.resonantFrequency || 196;
     this.dampingFrequency = processorOptions.dampingFrequency || 4000;
     this.feedbackAmount = processorOptions.feedbackAmount || 0.95;
-    this.mixAmount = processorOptions.mixAmount || 1;
 
     this.delayLine = new Float32Array(Math.ceil(this.sampleRate / 50));
     this.delayWriteIndex = 0;
@@ -60,8 +52,6 @@ class KarpProcessor extends AudioWorkletProcessor {
         this.dampingFrequency = value;
       } else if (type === 'feedbackAmount') {
         this.feedbackAmount = value;
-      } else if (type === 'mixAmount') {
-        this.mixAmount = value;
       }
     };
   }
@@ -86,7 +76,6 @@ class KarpProcessor extends AudioWorkletProcessor {
     const resonantFreq = parameters.resonantFrequency ? parameters.resonantFrequency[0] : this.resonantFrequency;
     const dampingFreq = parameters.dampingFrequency ? parameters.dampingFrequency[0] : this.dampingFrequency;
     const feedback = parameters.feedbackAmount ? parameters.feedbackAmount[0] : this.feedbackAmount;
-    const mix = parameters.mixAmount ? parameters.mixAmount[0] : this.mixAmount;
 
     if (resonantFreq !== this.resonantFrequency) {
       this.resonantFrequency = resonantFreq;
@@ -94,7 +83,6 @@ class KarpProcessor extends AudioWorkletProcessor {
     }
     if (dampingFreq !== this.dampingFrequency) this.dampingFrequency = dampingFreq;
     this.feedbackAmount = feedback;
-    this.mixAmount = mix;
 
     this.feedbackFilterCoeff = 1.0 - Math.exp(-2.0 * Math.PI * this.dampingFrequency / this.sampleRate);
 
@@ -111,7 +99,7 @@ class KarpProcessor extends AudioWorkletProcessor {
         this.delayLine[this.delayWriteIndex] = feedbackInput;
         this.delayWriteIndex = (this.delayWriteIndex + 1) % this.delayLine.length;
 
-        outputChannel[i] = inputChannel[i] * (1 - this.mixAmount) + delayedSample * this.mixAmount;
+        outputChannel[i] = delayedSample;
       }
     }
 

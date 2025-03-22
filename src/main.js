@@ -4,7 +4,7 @@ class KarpController {
     this.audioContext = null;
     this.noiseNode = null;
     this.karpNode = null;
-    this.gainNode = null;
+    this.outputGainNode = null;
     this.isPlaying = false;
 
     // UI elements
@@ -68,14 +68,12 @@ class KarpController {
       });
       this.filterNode = this.audioContext.createBiquadFilter();
       this.filterNode.type = 'lowpass';
-      this.filterNode.frequency.setValueAtTime(100, this.audioContext.currentTime);
+      this.filterNode.frequency.setValueAtTime(2000, this.audioContext.currentTime);
       this.karpNode = new AudioWorkletNode(this.audioContext, 'karp-processor', {
         processorOptions: {
-          cutoffFrequency: 12000, // 12kHz lowpass filter
           resonantFrequency: resonanceFreq, // Default from slider
-          dampingFreuqnecy: dampingFreq, // Default from slider
+          dampingFrequency: dampingFreq, // Default from slider
           feedbackAmount: feedbackAmount, // Default from slider
-          mixAmount: mixAmount, // Default from slider
           sampleRate: this.audioContext.sampleRate
         }
       });
@@ -84,20 +82,26 @@ class KarpController {
       this.resonanceParam = this.karpNode.parameters.get('resonantFrequency');
       this.dampingParam = this.karpNode.parameters.get('dampingFrequency');
       this.feedbackParam = this.karpNode.parameters.get('feedbackAmount');
-      this.mixParam = this.karpNode.parameters.get('mixAmount');
 
       // Always set up message port communication as fallback
       this.karpNode.port.start();
 
-      // Create gain node for volume control
-      this.gainNode = this.audioContext.createGain();
-      this.gainNode.gain.value = this.volumeSlider.value / 100;
+      // Create gain nodes for volume control
+      this.noiseGainNode = this.audioContext.createGain();
+      this.noiseGainNode.gain.value = 1 - this.mixSlider.value / 100;
+      this.karpGainNode = this.audioContext.createGain();
+      this.karpGainNode.gain.value = this.mixSlider.value / 100;
+      this.outputGainNode = this.audioContext.createGain();
+      this.outputGainNode.gain.value = this.volumeSlider.value / 100;
 
       // Connect nodes
       this.noiseNode.connect(this.filterNode);
       this.filterNode.connect(this.karpNode);
-      this.karpNode.connect(this.gainNode);
-      this.gainNode.connect(this.audioContext.destination);
+      this.filterNode.connect(this.noiseGainNode);
+      this.noiseGainNode.connect(this.outputGainNode);
+      this.karpNode.connect(this.karpGainNode);
+      this.karpGainNode.connect(this.outputGainNode);
+      this.outputGainNode.connect(this.audioContext.destination);
 
       return true;
     } catch (error) {
@@ -131,8 +135,8 @@ class KarpController {
     const volumeValue = this.volumeSlider.value;
     this.volumeValue.textContent = `${volumeValue}%`;
 
-    if (this.gainNode) {
-      this.gainNode.gain.value = volumeValue / 100;
+    if (this.outputGainNode) {
+      this.outputGainNode.gain.value = volumeValue / 100;
     }
   }
 
@@ -194,17 +198,9 @@ class KarpController {
     const mixValue = parseInt(this.mixSlider.value);
     this.mixValue.textContent = `${mixValue}%`;
 
-    if (this.karpNode) {
-      // Try to use AudioParam if available
-      if (this.mixParam) {
-        this.mixParam.setValueAtTime(mixValue / 100, this.audioContext.currentTime);
-      }
-
-      // Always send message as fallback
-      this.karpNode.port.postMessage({
-        type: 'mixAmount',
-        value: mixValue / 100
-      });
+    if (this.noiseGainNode && this.karpGainNode) {
+      this.noiseGainNode.gain.setValueAtTime(1 - mixValue / 100, this.audioContext.currentTime);
+      this.karpGainNode.gain.setValueAtTime(mixValue / 100, this.audioContext.currentTime);
     }
   }
 }
