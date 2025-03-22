@@ -17,9 +17,9 @@ class KarpProcessor extends AudioWorkletProcessor {
       },
       {
         name: 'feedbackAmount',
-        defaultValue: 0.95,
+        defaultValue: 1,
         minValue: 0,
-        maxValue: 0.95,
+        maxValue: 1,
         automationRate: 'k-rate'
       }
     ];
@@ -34,7 +34,7 @@ class KarpProcessor extends AudioWorkletProcessor {
     this.prevFeedbackSample = 0;
     this.resonantFrequency = processorOptions.resonantFrequency || 196;
     this.dampingFrequency = processorOptions.dampingFrequency || 4000;
-    this.feedbackAmount = processorOptions.feedbackAmount || 0.95;
+    this.feedbackAmount = processorOptions.feedbackAmount || 1;
 
     this.delayLine = new Float32Array(Math.ceil(this.sampleRate / 50));
     this.delayWriteIndex = 0;
