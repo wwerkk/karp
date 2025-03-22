@@ -60,7 +60,7 @@ class WhiteNoiseController {
         const mixAmount = parseInt(this.mixSlider.value) / 100;
         
         // Create white noise node with parameters
-        this.whiteNoiseNode = new AudioWorkletNode(this.audioContext, 'white-noise-processor', {
+        this.whiteNoiseNode = new AudioWorkletNode(this.audioContext, 'karp-processor', {
           processorOptions: {
             cutoffFrequency: 12000, // 12kHz lowpass filter
             resonantFrequency: resonanceFreq, // Default from slider

@@ -1,4 +1,4 @@
-class WhiteNoiseProcessor extends AudioWorkletProcessor {
+class KarpProcessor extends AudioWorkletProcessor {
   static get parameterDescriptors() {
     return [
       {
@@ -130,4 +130,4 @@ class WhiteNoiseProcessor extends AudioWorkletProcessor {
   }
 }
 
-registerProcessor('white-noise-processor', WhiteNoiseProcessor);
+registerProcessor('karp-processor', KarpProcessor);
