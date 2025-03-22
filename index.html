@@ -6,7 +6,8 @@
     <title>karp</title>
     <style>
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Arial, sans-serif;
         max-width: 600px;
         margin: 40px auto;
         padding: 20px;
@@ -14,10 +15,18 @@
         color: #333;
         border-radius: 10px;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s, color 0.3s;
+      }
+      body.dark-mode {
+        background-color: #222;
+        color: #ddd;
       }
       h1 {
         color: #222;
         text-align: center;
+      }
+      body.dark-mode h1 {
+        color: #ddd;
       }
       button {
         background-color: #4caf50;
@@ -45,6 +54,10 @@
         padding: 15px;
         border-radius: 6px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s;
+      }
+      body.dark-mode .control-group {
+        background: #333;
       }
       label {
         display: block;
@@ -60,6 +73,9 @@
         color: #666;
         float: right;
       }
+      body.dark-mode .value-display {
+        color: #bbb;
+      }
       .radio-group {
         display: flex;
         gap: 15px;
@@ -74,40 +90,134 @@
     </style>
   </head>
   <body>
-    
-    
-    <div class="control-group">
-      <div class="controls">
-        <button id="toggleButton">Start</button>
-      </div>
-      <label for="volumeSlider">Volume <span id="volumeValue" class="value-display">50%</span></label>
-      <input type="range" id="volumeSlider" min="0" max="100" value="50" autocomplete="off" />
+    <div class="controls">
+      <button id="toggleButton">Start</button>
     </div>
-    
+
     <div class="control-group">
-      <label for="resonanceSlider">Frequency <span id="resonanceValue" class="value-display">196 Hz</span></label>
-      <input type="range" id="resonanceSlider" min="50" max="1000" value="196" autocomplete="off" />
-      <label for="dampingSlider">Damping <span id="dampingValue" class="value-display">4000 Hz</span></label>
-      <input type="range" id="dampingSlider" min="4000" max="8000" value="4000" autocomplete="off" />
-      <label for="feedbackSlider">Feedback <span id="feedbackValue" class="value-display">0%</span></label>
-      <input type="range" id="feedbackSlider" min="0" max="100" value="100" step="0.01" autocomplete="off" />
-      <label for="mixSlider">Mix <span id="mixValue" class="value-display">100%</span></label>
-      <input type="range" id="mixSlider" min="0" max="100" value="100" autocomplete="off" />
+      <label for="volumeSlider"
+        >Volume <span id="volumeValue" class="value-display">50%</span></label
+      >
+      <input
+        type="range"
+        id="volumeSlider"
+        min="0"
+        max="100"
+        value="50"
+        autocomplete="off"
+      />
     </div>
-    
+
+    <div class="control-group">
+      <label for="resonanceSlider"
+        >Frequency
+        <span id="resonanceValue" class="value-display">196 Hz</span></label
+      >
+      <input
+        type="range"
+        id="resonanceSlider"
+        min="50"
+        max="1000"
+        value="196"
+        autocomplete="off"
+      />
+      <label for="dampingSlider"
+        >Damping
+        <span id="dampingValue" class="value-display">4000 Hz</span></label
+      >
+      <input
+        type="range"
+        id="dampingSlider"
+        min="4000"
+        max="8000"
+        value="4000"
+        autocomplete="off"
+      />
+      <label for="feedbackSlider"
+        >Feedback
+        <span id="feedbackValue" class="value-display">0%</span></label
+      >
+      <input
+        type="range"
+        id="feedbackSlider"
+        min="0"
+        max="100"
+        value="100"
+        step="0.01"
+        autocomplete="off"
+      />
+      <label for="mixSlider"
+        >Mix <span id="mixValue" class="value-display">100%</span></label
+      >
+      <input
+        type="range"
+        id="mixSlider"
+        min="0"
+        max="100"
+        value="100"
+        autocomplete="off"
+      />
+    </div>
+
     <div class="control-group">
       <label>Noise</label>
       <div class="radio-group">
-        <label><input type="radio" name="noiseMode" value="0" autocomplete="off" checked /> White</label>
-        <label><input type="radio" name="noiseMode" value="1" autocomplete="off" /> Pink</label>
-        <label><input type="radio" name="noiseMode" value="2" autocomplete="off" /> Texture</label>
+        <label
+          ><input
+            type="radio"
+            name="noiseMode"
+            value="0"
+            autocomplete="off"
+            checked
+          />
+          White</label
+        >
+        <label
+          ><input type="radio" name="noiseMode" value="1" autocomplete="off" />
+          Pink</label
+        >
+        <label
+          ><input type="radio" name="noiseMode" value="2" autocomplete="off" />
+          Texture</label
+        >
       </div>
-      <label for="noiseCutoffSlider">Cutoff <span id="noiseCutoffValue" class="value-display">2000 Hz</span></label>
-      <input type="range" id="noiseCutoffSlider" min="1000" max="8000" value="2000" autocomplete="off" />
-      <label for="noiseQSlider">Q <span id="noiseQValue" class="value-display">0.1</span></label>
-      <input type="range" id="noiseQSlider" min="0.01" max="1" value="0.1" step="0.01" autocomplete="off" />
+      <label for="noiseCutoffSlider"
+        >Cutoff
+        <span id="noiseCutoffValue" class="value-display">2000 Hz</span></label
+      >
+      <input
+        type="range"
+        id="noiseCutoffSlider"
+        min="1000"
+        max="8000"
+        value="2000"
+        autocomplete="off"
+      />
+      <label for="noiseQSlider"
+        >Q <span id="noiseQValue" class="value-display">0.1</span></label
+      >
+      <input
+        type="range"
+        id="noiseQSlider"
+        min="0.01"
+        max="1"
+        value="0.1"
+        step="0.01"
+        autocomplete="off"
+      />
     </div>
-    
+  </br>
+    <div class="controls">
+      <button id="toggleDarkMode">Toggle Dark Mode</button>
+    </div>
+
     <script type="module" src="src/main.js"></script>
+    <script>
+      document
+        .getElementById("toggleDarkMode")
+        .addEventListener("click", function () {
+          document.body.classList.toggle("dark-mode");
+        });
+    </script>
   </body>
 </html>
