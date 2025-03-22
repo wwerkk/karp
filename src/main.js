@@ -190,17 +190,21 @@ class KarpController {
   updateFeedback() {
     const feedbackValue = parseInt(this.feedbackSlider.value);
     this.feedbackValue.textContent = `${feedbackValue}%`;
+    let feedbackMapped = feedbackValue / 100;
+    console.log(feedbackMapped);
+    feedbackMapped = feedbackMapped > 0 ? feedbackMapped / Math.pow(feedbackMapped, 1/1.2) : 0;
+    console.log(feedbackMapped);
 
     if (this.karpNode) {
       // Try to use AudioParam if available
       if (this.feedbackParam) {
-        this.feedbackParam.setValueAtTime(feedbackValue / 100, this.audioContext.currentTime);
+        this.feedbackParam.setValueAtTime(feedbackMapped, this.audioContext.currentTime);
       }
 
       // Always send message as fallback
       this.karpNode.port.postMessage({
         type: 'feedbackAmount',
-        value: feedbackValue / 100
+        value: feedbackMapped
       });
     }
   }
