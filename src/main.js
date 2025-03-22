@@ -1,5 +1,4 @@
-// Main audio controller
-class KarpController {
+class AudioController {
   constructor() {
     this.audioContext = null;
     this.noiseNode = null;
@@ -235,5 +234,5 @@ class KarpController {
 
 // Initialize the app when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  new KarpController();
+  new AudioController();
 });
