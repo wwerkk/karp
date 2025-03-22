@@ -114,7 +114,7 @@ class AudioController {
       this.karpGainNode = this.audioContext.createGain();
       this.karpGainNode.gain.value = this.mixSlider.value / 100;
       this.outputGainNode = this.audioContext.createGain();
-      this.outputGainNode.gain.value = this.volumeSlider.value / 100;
+      this.outputGainNode.gain.value = Math.pow(this.volumeSlider.value / 100, 3);
 
       // Connect nodes
       this.noiseNode.connect(this.filterNode);
@@ -158,7 +158,7 @@ class AudioController {
     this.volumeValue.textContent = `${volumeValue}%`;
 
     if (this.outputGainNode) {
-      this.outputGainNode.gain.value = volumeValue / 100;
+      this.outputGainNode.gain.value = Math.pow(this.volumeSlider.value / 100, 3);
     }
   }
 
