@@ -104,13 +104,11 @@ class WhiteNoiseController {
       }
       
       if (this.isPlaying) {
-        // Stop noise
         await this.audioContext.suspend();
         this.isPlaying = false;
         this.toggleButton.textContent = 'Start';
         this.toggleButton.classList.remove('active');
       } else {
-        // Start noise
         await this.audioContext.resume();
         this.isPlaying = true;
         this.toggleButton.textContent = 'Stop';
