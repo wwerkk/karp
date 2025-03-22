@@ -19,6 +19,7 @@ class KarpController {
     this.feedbackValue = document.getElementById('feedbackValue');
     this.mixSlider = document.getElementById('mixSlider');
     this.mixValue = document.getElementById('mixValue');
+    this.noiseModeRadios = document.querySelectorAll('input[name="noiseMode"]');
 
     // Bind methods
     this.initAudio = this.initAudio.bind(this);
@@ -28,6 +29,7 @@ class KarpController {
     this.updateDamping = this.updateDamping.bind(this);
     this.updateFeedback = this.updateFeedback.bind(this);
     this.updateMix = this.updateMix.bind(this);
+    this.updateNoiseMode = this.updateNoiseMode.bind(this);
 
     // Add event listeners for changes and immediate input
     this.toggleButton.addEventListener('click', this.toggleKarp);
@@ -37,6 +39,9 @@ class KarpController {
     this.dampingSlider.addEventListener('input', this.updateDamping);
     this.feedbackSlider.addEventListener('input', this.updateFeedback);
     this.mixSlider.addEventListener('input', this.updateMix);
+    this.noiseModeRadios.forEach(radio => {
+      radio.addEventListener('change', this.updateNoiseMode);
+    });
 
     // Initialize display values from HTML defaults
     this.updateVolume();
@@ -44,6 +49,7 @@ class KarpController {
     this.updateDamping();
     this.updateFeedback();
     this.updateMix();
+    this.updateNoiseMode();
   }
 
   async initAudio() {
@@ -60,12 +66,17 @@ class KarpController {
       const dampingFreq = parseInt(this.dampingSlider.value)
       const feedbackAmount = parseInt(this.feedbackSlider.value) / 100;
       const mixAmount = parseInt(this.mixSlider.value) / 100;
+      const selectedMode = document.querySelector('input[name="noiseMode"]:checked').value;
+      const noiseMode = parseInt(selectedMode, 10);
 
       this.noiseNode = new AudioWorkletNode(this.audioContext, 'noise-processor', {
         processorOptions: {
-          mode: 2
+          mode: noiseMode
         }
       });
+      this.noiseModeParam = this.noiseNode.parameters.get('mode');
+      this.noiseNode.port.start();
+
       this.filterNode = this.audioContext.createBiquadFilter();
       this.filterNode.type = 'lowpass';
       this.filterNode.frequency.setValueAtTime(2000, this.audioContext.currentTime);
@@ -201,6 +212,19 @@ class KarpController {
     if (this.noiseGainNode && this.karpGainNode) {
       this.noiseGainNode.gain.setValueAtTime(1 - mixValue / 100, this.audioContext.currentTime);
       this.karpGainNode.gain.setValueAtTime(mixValue / 100, this.audioContext.currentTime);
+    }
+  }
+
+  updateNoiseMode() {
+    const selectedMode = document.querySelector('input[name="noiseMode"]:checked').value;
+    const modeValue = parseInt(selectedMode, 10);
+    if (this.noiseNode) {
+      if (this.noiseModeParam) this.noiseModeParam.setValueAtTime(modeValue, this.audioContext.currentTime);
+
+      this.noiseNode.port.postMessage({
+        type: 'mode',
+        value: modeValue
+      });
     }
   }
 }
