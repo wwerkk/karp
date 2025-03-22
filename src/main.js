@@ -190,9 +190,7 @@ class AudioController {
     const feedbackValue = parseInt(this.feedbackSlider.value);
     this.feedbackValue.textContent = `${feedbackValue}%`;
     let feedbackMapped = feedbackValue / 100;
-    console.log(feedbackMapped);
     feedbackMapped = feedbackMapped > 0 ? feedbackMapped / Math.pow(feedbackMapped, 1/1.2) : 0;
-    console.log(feedbackMapped);
 
     if (this.karpNode) {
       // Try to use AudioParam if available
