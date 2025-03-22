@@ -51,7 +51,7 @@ class KarpController {
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         
         // Add AudioWorklet module
-        await this.audioContext.audioWorklet.addModule('./src/processor.js');
+        await this.audioContext.audioWorklet.addModule('./src/karp.js');
         
         // Get current parameter values
         const resonanceFreq = parseInt(this.resonanceSlider.value);
