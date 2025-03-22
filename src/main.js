@@ -65,7 +65,6 @@ class KarpController {
       const resonanceFreq = parseInt(this.resonanceSlider.value);
       const dampingFreq = parseInt(this.dampingSlider.value)
       const feedbackAmount = parseInt(this.feedbackSlider.value) / 100;
-      const mixAmount = parseInt(this.mixSlider.value) / 100;
       const selectedMode = document.querySelector('input[name="noiseMode"]:checked').value;
       const noiseMode = parseInt(selectedMode, 10);
 
