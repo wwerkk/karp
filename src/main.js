@@ -21,6 +21,8 @@ class AudioController {
     this.noiseModeRadios = document.querySelectorAll('input[name="noiseMode"]');
     this.noiseCutoffSlider = document.getElementById('noiseCutoffSlider');
     this.noiseCutoffValue = document.getElementById('noiseCutoffValue');
+    this.noiseQSlider = document.getElementById('noiseQSlider');
+    this.noiseQValue = document.getElementById('noiseQValue');
 
     // Bind methods
     this.initAudio = this.initAudio.bind(this);
@@ -32,6 +34,7 @@ class AudioController {
     this.updateMix = this.updateMix.bind(this);
     this.updateNoiseMode = this.updateNoiseMode.bind(this);
     this.updateNoiseCutoff = this.updateNoiseCutoff.bind(this);
+    this.updateNoiseQ = this.updateNoiseQ.bind(this);
 
     // Add event listeners for changes and immediate input
     this.toggleButton.addEventListener('click', this.toggleKarp);
@@ -45,6 +48,7 @@ class AudioController {
       radio.addEventListener('change', this.updateNoiseMode);
     });
     this.noiseCutoffSlider.addEventListener('input', this.updateNoiseCutoff);
+    this.noiseQSlider.addEventListener('input', this.updateNoiseQ);
 
     // Initialize display values from HTML defaults
     this.updateVolume();
@@ -54,6 +58,7 @@ class AudioController {
     this.updateMix();
     this.updateNoiseMode();
     this.updateNoiseCutoff();
+    this.updateNoiseQ();
   }
 
   async initAudio() {
@@ -72,6 +77,7 @@ class AudioController {
       const selectedMode = document.querySelector('input[name="noiseMode"]:checked').value;
       const noiseMode = parseInt(selectedMode, 10);
       const noiseCutoff = parseInt(this.noiseCutoffSlider.value);
+      const noiseQ = parseFloat(this.noiseQSlider.value);
 
       this.noiseNode = new AudioWorkletNode(this.audioContext, 'noise-processor', {
         processorOptions: {
@@ -83,7 +89,7 @@ class AudioController {
 
       this.filterNode = this.audioContext.createBiquadFilter();
       this.filterNode.type = 'bandpass';
-      this.filterNode.Q.setValueAtTime(0.1, this.audioContext.currentTime);
+      this.filterNode.Q.setValueAtTime(noiseQ, this.audioContext.currentTime);
       this.filterNode.frequency.setValueAtTime(noiseCutoff, this.audioContext.currentTime);
       this.karpNode = new AudioWorkletNode(this.audioContext, 'karp-processor', {
         processorOptions: {
@@ -241,6 +247,12 @@ class AudioController {
       this.noiseCutoffValue.textContent = `${noiseCutoffValue} Hz`;
       if (this.filterNode) this.filterNode.frequency.setValueAtTime(noiseCutoffValue, this.audioContext.currentTime);
     }
+  }
+
+  updateNoiseQ() {
+    const noiseQValue = parseFloat(this.noiseQSlider.value);
+    this.noiseQValue.textContent = `${noiseQValue}`;
+    if (this.filterNode) this.filterNode.Q.setValueAtTime(noiseQValue, this.audioContext.currentTime);
   }
 }
 
