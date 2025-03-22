@@ -1,6 +1,6 @@
 class NoiseProcessor extends AudioWorkletProcessor {
     static get parameterDescriptors() {
-        return [{ name: "mode", defaultValue: 2, minValue: 0, maxValue: 2, automationRate: "k-rate" }];
+        return [{ name: "mode", defaultValue: 0, minValue: 0, maxValue: 2, automationRate: "k-rate" }];
     }
 
     constructor() {
