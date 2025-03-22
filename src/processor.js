@@ -122,7 +122,7 @@ class WhiteNoiseProcessor extends AudioWorkletProcessor {
         this.delayLine[this.delayWriteIndex] = feedbackInput;
         this.delayWriteIndex = (this.delayWriteIndex + 1) % this.delayLine.length;
 
-        outputChannel[i] = delayedSample;
+        outputChannel[i] = pinkNoise * (1 - this.mixAmount) + delayedSample * this.mixAmount;
       }
     }
 
