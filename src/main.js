@@ -78,7 +78,8 @@ class KarpController {
       this.noiseNode.port.start();
 
       this.filterNode = this.audioContext.createBiquadFilter();
-      this.filterNode.type = 'lowpass';
+      this.filterNode.type = 'bandpass';
+      this.filterNode.Q.setValueAtTime(0.1, this.audioContext.currentTime);
       this.filterNode.frequency.setValueAtTime(2000, this.audioContext.currentTime);
       this.karpNode = new AudioWorkletNode(this.audioContext, 'karp-processor', {
         processorOptions: {
