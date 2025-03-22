@@ -67,7 +67,7 @@ class AudioController {
 
       // Get current parameter values
       const resonanceFreq = parseInt(this.resonanceSlider.value);
-      const dampingFreq = parseInt(this.dampingSlider.value)
+      const dampingFreq = parseInt(this.dampingSlider.value);
       const feedbackAmount = parseInt(this.feedbackSlider.value) / 100;
       const selectedMode = document.querySelector('input[name="noiseMode"]:checked').value;
       const noiseMode = parseInt(selectedMode, 10);
@@ -196,7 +196,7 @@ class AudioController {
     const feedbackValue = parseInt(this.feedbackSlider.value);
     this.feedbackValue.textContent = `${feedbackValue}%`;
     let feedbackMapped = feedbackValue / 100;
-    feedbackMapped = feedbackMapped > 0 ? feedbackMapped / Math.pow(feedbackMapped, 1/1.2) : 0;
+    feedbackMapped = feedbackMapped > 0 ? feedbackMapped / Math.pow(feedbackMapped, 1 / 1.2) : 0;
 
     if (this.karpNode) {
       // Try to use AudioParam if available
