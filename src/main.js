@@ -2,7 +2,7 @@
 class WhiteNoiseController {
     constructor() {
       this.audioContext = null;
-      this.whiteNoiseNode = null;
+      this.karpNode = null;
       this.gainNode = null;
       this.isPlaying = false;
       
@@ -59,8 +59,8 @@ class WhiteNoiseController {
         const feedbackAmount = parseInt(this.feedbackSlider.value) / 100;
         const mixAmount = parseInt(this.mixSlider.value) / 100;
         
-        // Create white noise node with parameters
-        this.whiteNoiseNode = new AudioWorkletNode(this.audioContext, 'karp-processor', {
+        // Create karp node with parameters
+        this.karpNode = new AudioWorkletNode(this.audioContext, 'karp-processor', {
           processorOptions: {
             cutoffFrequency: 12000, // 12kHz lowpass filter
             resonantFrequency: resonanceFreq, // Default from slider
@@ -72,20 +72,20 @@ class WhiteNoiseController {
         });
         
         // Set up parameter communication
-        this.resonanceParam = this.whiteNoiseNode.parameters.get('resonantFrequency');
-        this.dampingParam = this.whiteNoiseNode.parameters.get('dampingFrequency');
-        this.feedbackParam = this.whiteNoiseNode.parameters.get('feedbackAmount');
-        this.mixParam = this.whiteNoiseNode.parameters.get('mixAmount');
+        this.resonanceParam = this.karpNode.parameters.get('resonantFrequency');
+        this.dampingParam = this.karpNode.parameters.get('dampingFrequency');
+        this.feedbackParam = this.karpNode.parameters.get('feedbackAmount');
+        this.mixParam = this.karpNode.parameters.get('mixAmount');
         
         // Always set up message port communication as fallback
-        this.whiteNoiseNode.port.start();
+        this.karpNode.port.start();
         
         // Create gain node for volume control
         this.gainNode = this.audioContext.createGain();
         this.gainNode.gain.value = this.volumeSlider.value / 100;
         
         // Connect nodes
-        this.whiteNoiseNode.connect(this.gainNode);
+        this.karpNode.connect(this.gainNode);
         this.gainNode.connect(this.audioContext.destination);
         
         return true;
@@ -131,14 +131,14 @@ class WhiteNoiseController {
       const resonanceValue = parseInt(this.resonanceSlider.value);
       this.resonanceValue.textContent = `${resonanceValue} Hz`;
       
-      if (this.whiteNoiseNode) {
+      if (this.karpNode) {
         // Try to use AudioParam if available
         if (this.resonanceParam) {
           this.resonanceParam.setValueAtTime(resonanceValue, this.audioContext.currentTime);
         }
         
         // Always send message as fallback
-        this.whiteNoiseNode.port.postMessage({
+        this.karpNode.port.postMessage({
           type: 'resonantFrequency',
           value: resonanceValue
         });
@@ -149,14 +149,14 @@ class WhiteNoiseController {
       const dampingValue = parseInt(this.dampingSlider.value);
       this.dampingValue.textContent = `${dampingValue} Hz`;
       
-      if (this.whiteNoiseNode) {
+      if (this.karpNode) {
         // Try to use AudioParam if available
         if (this.dampingParam) {
           this.dampingParam.setValueAtTime(dampingValue, this.audioContext.currentTime);
         }
         
         // Always send message as fallback
-        this.whiteNoiseNode.port.postMessage({
+        this.karpNode.port.postMessage({
           type: 'dampingFrequency',
           value: dampingValue
         });
@@ -167,14 +167,14 @@ class WhiteNoiseController {
       const feedbackValue = parseInt(this.feedbackSlider.value);
       this.feedbackValue.textContent = `${feedbackValue}%`;
       
-      if (this.whiteNoiseNode) {
+      if (this.karpNode) {
         // Try to use AudioParam if available
         if (this.feedbackParam) {
           this.feedbackParam.setValueAtTime(feedbackValue / 100, this.audioContext.currentTime);
         }
         
         // Always send message as fallback
-        this.whiteNoiseNode.port.postMessage({
+        this.karpNode.port.postMessage({
           type: 'feedbackAmount',
           value: feedbackValue / 100
         });
@@ -185,14 +185,14 @@ class WhiteNoiseController {
       const mixValue = parseInt(this.mixSlider.value);
       this.mixValue.textContent = `${mixValue}%`;
       
-      if (this.whiteNoiseNode) {
+      if (this.karpNode) {
         // Try to use AudioParam if available
         if (this.mixParam) {
           this.mixParam.setValueAtTime(mixValue / 100, this.audioContext.currentTime);
         }
         
         // Always send message as fallback
-        this.whiteNoiseNode.port.postMessage({
+        this.karpNode.port.postMessage({
           type: 'mixAmount',
           value: mixValue / 100
         });
