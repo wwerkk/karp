@@ -17,7 +17,7 @@ class WhiteNoiseProcessor extends AudioWorkletProcessor {
       },
       {
         name: 'feedbackAmount',
-        defaultValue: 0,
+        defaultValue: 0.95,
         minValue: 0,
         maxValue: 0.95,
         automationRate: 'k-rate'
@@ -41,7 +41,7 @@ class WhiteNoiseProcessor extends AudioWorkletProcessor {
     this.prevFeedbackSample = 0;
     this.resonantFrequency = processorOptions.resonantFrequency || 196;
     this.dampingFrequency = processorOptions.dampingFrequency || 4000;
-    this.feedbackAmount = processorOptions.feedbackAmount || 0;
+    this.feedbackAmount = processorOptions.feedbackAmount || 0.95;
     this.mixAmount = processorOptions.mixAmount || 1;
 
     this.delayLine = new Float32Array(Math.ceil(this.sampleRate / 50));
