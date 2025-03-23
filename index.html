@@ -66,8 +66,8 @@
       input[type="range"] {
         width: 100%;
         cursor: pointer;
-        margin-top: 40px;
-        margin-bottom: 50px;
+        margin-top: 10px;
+        margin-bottom: 20px;
       }
       .value-display {
         font-weight: normal;
@@ -88,6 +88,32 @@
         gap: 5px;
         font-weight: normal;
       }
+      .step-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .step-button {
+        background-color: #2196F3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .step-button:hover {
+        background-color: #0b7dda;
+      }
+      .slider-container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+      }
     </style>
   </head>
   <body>
@@ -97,8 +123,12 @@
     
     <div class="control-group">
       <label for="volumeSlider">Volume <span id="volumeValue" class="value-display">50%</span></label>
-    </br>
-    </br>
+      
+      <div class="step-buttons">
+        <button class="step-button" id="volumeDecrease">-</button>
+        <button class="step-button" id="volumeIncrease">+</button>
+      </div>
+      
       <input type="range" id="volumeSlider" min="0" max="100" value="50" autocomplete="off" />
     </div>
     

@@ -10,6 +10,8 @@ class AudioController {
     this.toggleButton = document.getElementById('toggleButton');
     this.volumeSlider = document.getElementById('volumeSlider');
     this.volumeValue = document.getElementById('volumeValue');
+    this.volumeIncrease = document.getElementById("volumeIncrease");
+    this.volumeDecrease = document.getElementById("volumeDecrease");
     this.feedbackSlider = document.getElementById('feedbackSlider');
     this.resonanceSlider = document.getElementById('resonanceSlider');
     this.resonanceValue = document.getElementById('resonanceValue');
@@ -28,6 +30,8 @@ class AudioController {
     this.initAudio = this.initAudio.bind(this);
     this.toggleKarp = this.toggleKarp.bind(this);
     this.updateVolume = this.updateVolume.bind(this);
+    this.increaseVolume = this.increaseVolume.bind(this);
+    this.decreaseVolume = this.decreaseVolume.bind(this);
     this.updateResonance = this.updateResonance.bind(this);
     this.updateDamping = this.updateDamping.bind(this);
     this.updateFeedback = this.updateFeedback.bind(this);
@@ -40,6 +44,8 @@ class AudioController {
     this.toggleButton.addEventListener('click', this.toggleKarp);
 
     this.volumeSlider.addEventListener('input', this.updateVolume);
+    this.volumeIncrease.addEventListener("click", this.increaseVolume);
+    this.volumeDecrease.addEventListener("click", this.decreaseVolume);
     this.resonanceSlider.addEventListener('input', this.updateResonance);
     this.dampingSlider.addEventListener('input', this.updateDamping);
     this.feedbackSlider.addEventListener('input', this.updateFeedback);
@@ -159,6 +165,28 @@ class AudioController {
 
     if (this.outputGainNode) {
       this.outputGainNode.gain.setValueAtTime(Math.pow(this.volumeSlider.value / 100, 3), this.audioContext.currentTime);
+    }
+  }
+
+  increaseVolume() {
+    const slider = document.getElementById("volumeSlider");
+    const volumeValue = Math.max(0, Math.min(parseInt(slider.value) + 1, slider.max));
+    slider.value = volumeValue;
+    document.getElementById("volumeValue").textContent = `${volumeValue}%`
+
+    if (this.outputGainNode) {
+      this.outputGainNode.gain.setValueAtTime(Math.pow(volumeValue / 100, 3), this.audioContext.currentTime);
+    }
+  }
+
+  decreaseVolume() {
+    const slider = document.getElementById("volumeSlider");
+    const volumeValue = Math.max(0, Math.min(parseInt(slider.value) - 1, slider.max));
+    slider.value = volumeValue;
+    document.getElementById("volumeValue").textContent = `${volumeValue}%`
+
+    if (this.outputGainNode) {
+      this.outputGainNode.gain.setValueAtTime(Math.pow(volumeValue / 100, 3), this.audioContext.currentTime);
     }
   }
 
