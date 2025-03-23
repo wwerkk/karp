@@ -19,7 +19,7 @@ class KarpProcessor extends AudioWorkletProcessor {
         name: 'feedbackAmount',
         defaultValue: 0,
         minValue: 0,
-        maxValue: 1,
+        maxValue: 0.95,
         automationRate: 'k-rate'
       }
     ];
