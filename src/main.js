@@ -171,7 +171,7 @@ class AudioController {
     this.volumeValue.textContent = `${volumeValue}%`;
 
     if (this.outputGainNode) {
-      this.outputGainNode.gain.setValueAtTime(Math.pow(this.volumeSlider.value / 100, 3), this.audioContext.currentTime);
+      this.outputGainNode.gain.linearRampToValueAtTime(Math.pow(this.volumeSlider.value / 100, 3), this.audioContext.currentTime + 0.1);
     }
   }
 
@@ -181,7 +181,7 @@ class AudioController {
     this.volumeValue.textContent = `${volumeValue}%`;
 
     if (this.outputGainNode) {
-      this.outputGainNode.gain.setValueAtTime(Math.pow(volumeValue / 100, 3), this.audioContext.currentTime);
+      this.outputGainNode.gain.linearRampToValueAtTime(Math.pow(this.volumeSlider.value / 100, 3), this.audioContext.currentTime + 0.5);
     }
   }
 
@@ -191,7 +191,7 @@ class AudioController {
     this.volumeValue.textContent = `${volumeValue}%`;
 
     if (this.outputGainNode) {
-      this.outputGainNode.gain.setValueAtTime(Math.pow(volumeValue / 100, 3), this.audioContext.currentTime);
+      this.outputGainNode.gain.linearRampToValueAtTime(Math.pow(this.volumeSlider.value / 100, 3), this.audioContext.currentTime + 0.5);
     }
   }
 
@@ -239,7 +239,7 @@ class AudioController {
 
     if (this.karpNode) {
       if (this.feedbackParam) {
-        this.feedbackParam.setValueAtTime(feedbackMapped, this.audioContext.currentTime);
+        this.feedbackParam.linearRampToValueAtTime(feedbackMapped, this.audioContext.currentTime + 0.1);
       }
 
       // Always send message as fallback
@@ -259,7 +259,7 @@ class AudioController {
     feedbackMapped = feedbackMapped > 0 ? feedbackMapped / Math.pow(feedbackMapped, 1 / 2) : 0; // inv sqrt mapping
     if (this.karpNode) {
       if (this.feedbackParam) {
-        this.feedbackParam.setValueAtTime(feedbackMapped, this.audioContext.currentTime);
+        this.feedbackParam.linearRampToValueAtTime(feedbackMapped, this.audioContext.currentTime + 0.5);
       }
 
       this.karpNode.port.postMessage({
@@ -278,7 +278,7 @@ class AudioController {
     feedbackMapped = feedbackMapped > 0 ? feedbackMapped / Math.pow(feedbackMapped, 1 / 2) : 0; // inv sqrt mapping
     if (this.karpNode) {
       if (this.feedbackParam) {
-        this.feedbackParam.setValueAtTime(feedbackMapped, this.audioContext.currentTime);
+        this.feedbackParam.linearRampToValueAtTime(feedbackMapped, this.audioContext.currentTime + 0.5);
       }
 
       this.karpNode.port.postMessage({
