@@ -14,6 +14,8 @@ class AudioController {
     this.volumeDecrease = document.getElementById("volumeDecrease");
     this.feedbackSlider = document.getElementById('feedbackSlider');
     this.feedbackValue = document.getElementById('feedbackValue');
+    this.feedbackIncrease = document.getElementById('feedbackIncrease');
+    this.feedbackDecrease = document.getElementById('feedbackDecrease');
     this.resonanceSlider = document.getElementById('resonanceSlider');
     this.resonanceValue = document.getElementById('resonanceValue');
     this.dampingSlider = document.getElementById('dampingSlider');
@@ -36,6 +38,8 @@ class AudioController {
     this.updateResonance = this.updateResonance.bind(this);
     this.updateDamping = this.updateDamping.bind(this);
     this.updateFeedback = this.updateFeedback.bind(this);
+    this.increaseFeedback = this.increaseFeedback.bind(this);
+    this.decreaseFeedback = this.decreaseFeedback.bind(this);
     this.updateMix = this.updateMix.bind(this);
     this.updateNoiseMode = this.updateNoiseMode.bind(this);
     this.updateNoiseCutoff = this.updateNoiseCutoff.bind(this);
@@ -50,6 +54,8 @@ class AudioController {
     this.resonanceSlider.addEventListener('input', this.updateResonance);
     this.dampingSlider.addEventListener('input', this.updateDamping);
     this.feedbackSlider.addEventListener('input', this.updateFeedback);
+    this.feedbackIncrease.addEventListener("click", this.increaseFeedback);
+    this.feedbackDecrease.addEventListener("click", this.decreaseFeedback);
     this.mixSlider.addEventListener('input', this.updateMix);
     this.noiseModeRadios.forEach(radio => {
       radio.addEventListener('change', this.updateNoiseMode);
@@ -229,8 +235,7 @@ class AudioController {
     const feedbackValue = parseInt(this.feedbackSlider.value);
     this.feedbackValue.textContent = `${feedbackValue}%`;
     let feedbackMapped = feedbackValue / 100;
-    // feedbackMapped = feedbackMapped > 0 ? feedbackMapped / Math.pow(feedbackMapped, 1 / 1.2) : 0; // inv root mapping
-    // feedbackMapped = // sin mapping
+    feedbackMapped = feedbackMapped > 0 ? feedbackMapped / Math.pow(feedbackMapped, 1 / 2) : 0; // inv sqrt mapping
 
     if (this.karpNode) {
       if (this.feedbackParam) {
@@ -238,6 +243,44 @@ class AudioController {
       }
 
       // Always send message as fallback
+      this.karpNode.port.postMessage({
+        type: 'feedbackAmount',
+        value: feedbackMapped
+      });
+    }
+  }
+
+  increaseFeedback() {
+    const feedbackValue = Math.max(0, Math.min(parseInt(this.feedbackSlider.value) + 1, this.feedbackSlider.max));
+    this.feedbackSlider.value = feedbackValue;
+    this.feedbackValue.textContent = `${feedbackValue}%`
+
+    let feedbackMapped = feedbackValue / 100;
+    feedbackMapped = feedbackMapped > 0 ? feedbackMapped / Math.pow(feedbackMapped, 1 / 2) : 0; // inv sqrt mapping
+    if (this.karpNode) {
+      if (this.feedbackParam) {
+        this.feedbackParam.setValueAtTime(feedbackMapped, this.audioContext.currentTime);
+      }
+
+      this.karpNode.port.postMessage({
+        type: 'feedbackAmount',
+        value: feedbackMapped
+      });
+    }
+  }
+
+  decreaseFeedback() {
+    const feedbackValue = Math.max(0, Math.min(parseInt(this.feedbackSlider.value) - 1, this.feedbackSlider.max));
+    this.feedbackSlider.value = feedbackValue;
+    this.feedbackValue.textContent = `${feedbackValue}%`
+
+    let feedbackMapped = feedbackValue / 100;
+    feedbackMapped = feedbackMapped > 0 ? feedbackMapped / Math.pow(feedbackMapped, 1 / 2) : 0; // inv sqrt mapping
+    if (this.karpNode) {
+      if (this.feedbackParam) {
+        this.feedbackParam.setValueAtTime(feedbackMapped, this.audioContext.currentTime);
+      }
+
       this.karpNode.port.postMessage({
         type: 'feedbackAmount',
         value: feedbackMapped
