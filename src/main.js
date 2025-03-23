@@ -158,7 +158,7 @@ class AudioController {
     this.volumeValue.textContent = `${volumeValue}%`;
 
     if (this.outputGainNode) {
-      this.outputGainNode.gain.value = Math.pow(this.volumeSlider.value / 100, 3);
+      this.outputGainNode.gain.setValueAtTime(Math.pow(this.volumeSlider.value / 100, 3), this.audioContext.currentTime);
     }
   }
 
