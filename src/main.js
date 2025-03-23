@@ -232,7 +232,6 @@ class AudioController {
     // feedbackMapped = // sin mapping
 
     if (this.karpNode) {
-      // Try to use AudioParam if available
       if (this.feedbackParam) {
         this.feedbackParam.setValueAtTime(feedbackMapped, this.audioContext.currentTime);
       }
