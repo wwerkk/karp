@@ -154,7 +154,7 @@ class AudioController {
   }
 
   updateVolume() {
-    const volumeValue = this.volumeSlider.value;
+    const volumeValue = parseInt(this.volumeSlider.value);
     this.volumeValue.textContent = `${volumeValue}%`;
 
     if (this.outputGainNode) {
