@@ -13,6 +13,7 @@ class AudioController {
     this.volumeIncrease = document.getElementById("volumeIncrease");
     this.volumeDecrease = document.getElementById("volumeDecrease");
     this.feedbackSlider = document.getElementById('feedbackSlider');
+    this.feedbackValue = document.getElementById('feedbackValue');
     this.resonanceSlider = document.getElementById('resonanceSlider');
     this.resonanceValue = document.getElementById('resonanceValue');
     this.dampingSlider = document.getElementById('dampingSlider');
