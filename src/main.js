@@ -169,10 +169,9 @@ class AudioController {
   }
 
   increaseVolume() {
-    const slider = document.getElementById("volumeSlider");
-    const volumeValue = Math.max(0, Math.min(parseInt(slider.value) + 1, slider.max));
-    slider.value = volumeValue;
-    document.getElementById("volumeValue").textContent = `${volumeValue}%`
+    const volumeValue = Math.max(0, Math.min(parseInt(this.volumeSlider.value) + 1, this.volumeSlider.max));
+    this.volumeSlider.value = volumeValue;
+    this.volumeValue.textContent = `${volumeValue}%`;
 
     if (this.outputGainNode) {
       this.outputGainNode.gain.setValueAtTime(Math.pow(volumeValue / 100, 3), this.audioContext.currentTime);
@@ -180,10 +179,9 @@ class AudioController {
   }
 
   decreaseVolume() {
-    const slider = document.getElementById("volumeSlider");
-    const volumeValue = Math.max(0, Math.min(parseInt(slider.value) - 1, slider.max));
-    slider.value = volumeValue;
-    document.getElementById("volumeValue").textContent = `${volumeValue}%`
+    const volumeValue = Math.max(0, Math.min(parseInt(this.volumeSlider.value) - 1, this.volumeSlider.max));
+    this.volumeSlider.value = volumeValue;
+    this.volumeValue.textContent = `${volumeValue}%`;
 
     if (this.outputGainNode) {
       this.outputGainNode.gain.setValueAtTime(Math.pow(volumeValue / 100, 3), this.audioContext.currentTime);
